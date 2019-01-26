@@ -162,6 +162,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="mnist\t10k-images-idx3-ubyte" />
+    <None Include="mnist\t10k-labels-idx1-ubyte" />
+    <None Include="mnist\train-images-idx3-ubyte" />
+    <None Include="mnist\train-labels-idx1-ubyte" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

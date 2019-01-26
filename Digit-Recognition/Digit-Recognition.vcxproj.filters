@@ -27,4 +27,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="mnist\train-images-idx3-ubyte">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="mnist\train-labels-idx1-ubyte">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="mnist\t10k-images-idx3-ubyte">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="mnist\t10k-labels-idx1-ubyte">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
