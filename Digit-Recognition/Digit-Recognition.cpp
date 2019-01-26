@@ -2,28 +2,95 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <stdlib.h>
+
+#define ubyte unsigned char
 
 using namespace std;
 
-static string trainingImages = "mnist/t10k-images-idx3-ubyte";
-static string traininLabels  = "mnist/t10k-labels-idx1-ubyte";
+static string trainingImages = "mnist/train-images.idx3-ubyte";
+static string trainingLabels = "mnist/train-labels.idx1-ubyte";
+
+class Digit {
+public:
+	vector<vector<ubyte>> image;
+	ubyte label;
+
+	Digit() {
+		vector<ubyte> imageRow;
+		for (int i = 0; i < 28; i++)
+		{
+			for (int j = 0; j < 28; j++)
+			{
+				imageRow.push_back(0);
+			}
+			image.push_back(imageRow);
+		}
+	}
+
+	string ToString() {
+		string result;
+		for (int i = 0; i < 28; i++)
+		{
+			for (int j = 0; j < 28; j++)
+			{
+				if (image[i][j] > 204)
+					result += "\219";
+				else if (image[i][j] > 153)
+					result += "\178";
+				else if (image[i][j] > 102)
+					result += "\177";
+				else if (image[i][j] > 51)
+					result += "\176";
+				else
+					result += " ";
+
+			}
+			result += "\n";
+		}
+		return result;
+	}
+};
 
 class Data {
 public:
 	ifstream images;
 	ifstream labels;
-	char number;
+	char temp;
+
+	vector<Digit> digits;
 
 	void readMnist() {
-		images.open(trainingImages.c_str(), ios::binary);
-		labels.open(trainingImages.c_str(), ios::binary);
+		images.open(trainingImages, ios::binary);
+		labels.open(trainingLabels, ios::binary);
 
-		for (int i = 1; i <= 16; ++i) {
-			images.read(&number, sizeof(char));
+		//skipping fstream additional information
+		for (int i = 0; i < 16; ++i) 
+			images.read(&temp, sizeof(ubyte));
+		for (int i = 0; i < 8; ++i) 
+			labels.read(&temp, sizeof(ubyte));
+		
+		//loop for reading all images to memory
+		cout << "Reading mnist to memory:" << endl;
+		for (int m = 0; m < 60000; m++)
+		{
+			digits.push_back(*(new Digit()));
+
+			labels.read((char*)&digits[m].label, sizeof(ubyte));
+
+			for (int i = 0; i < 28; i++)
+			{
+				for (int j = 0; j < 28; j++)
+				{
+					images.read((char*)&digits[m].image[i][j], sizeof(ubyte));
+				}
+			}
+			if (m % 600 == 0) {
+				cout << "\r" << m/600 << " %";
+			}
 		}
-		for (int i = 1; i <= 8; ++i) {
-			labels.read(&number, sizeof(char));
-		}
+		cout << endl;
 	}
 };
 
@@ -33,5 +100,5 @@ int main()
 
 	data.readMnist();
 
-	cout << data.number << endl;
+	cout << data.digits[0].ToString() << endl;
 }
