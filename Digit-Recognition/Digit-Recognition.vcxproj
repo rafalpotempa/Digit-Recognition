@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -151,10 +151,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="constatns.h" />
+    <ClInclude Include="Data.h" />
+    <ClInclude Include="Digit.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Digit-Recognition.cpp" />
+    <ClCompile Include="Data.cpp" />
+    <ClCompile Include="Digit.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -167,6 +173,9 @@
     <None Include="mnist\t10k-labels.idx1-ubyte" />
     <None Include="mnist\train-images.idx3-ubyte" />
     <None Include="mnist\train-labels.idx1-ubyte" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Digit-Recognition.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
