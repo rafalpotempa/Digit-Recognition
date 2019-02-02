@@ -19,20 +19,20 @@ string Digit::ToString()
 	string result;
 
 	result += "Label: ";
-	result += (unsigned char)label;
+	result += label + '0';
 
 	for (int i = 0; i < 28; i++)
 	{
 		for (int j = 0; j < 28; j++)
 		{
 			if (image[i][j] > 204)
-				result += "\219";
+				result += 219;
 			else if (image[i][j] > 153)
-				result += "\178";
+				result += 178;
 			else if (image[i][j] > 102)
-				result += "\177";
+				result += 177;
 			else if (image[i][j] > 51)
-				result += "\176";
+				result += 176;
 			else
 				result += " ";
 		}

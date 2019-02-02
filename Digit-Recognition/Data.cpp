@@ -21,7 +21,7 @@ void Data::readMnist() {
 	cout << "Reading mnist to memory:" << endl;
 
 
-	for (int m = 0; m < 60000; m++)
+	for (int m = 0; m < 600; m++)
 	{
 		labelsFile.read((char*)&digit.label, sizeof(ubyte));
 
