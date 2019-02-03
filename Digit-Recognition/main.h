@@ -2,6 +2,6 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "constatns.h"
+#include "Constants.h"
 #include "Digit.h"
 #include "Data.h"

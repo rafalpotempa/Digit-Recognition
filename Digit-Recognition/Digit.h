@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "constatns.h"
+#include "Constants.h"
 
 class Digit
 {

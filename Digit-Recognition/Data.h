@@ -3,7 +3,7 @@
 #include <fstream>
 #include <vector>
 #include "Digit.h"
-#include "constatns.h"
+#include "Constants.h"
 
 class Data {
 	ifstream imagesFile;
