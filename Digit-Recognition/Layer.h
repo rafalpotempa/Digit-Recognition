@@ -5,16 +5,18 @@
 
 class Layer
 {
-	int rows;
-	int cols;
-
-	vector<vector<double>> w; //weights matrix
-	vector<vector<double>> S; //computational matrix
-	vector<vector<double>> Z; 
-
-
 public:
-	Layer(int, int);
+	int inputs = 0;
+	int neurons = 0;
+	int outputs = 0;
+
+	Layer* nextLayer;
+
+	vector<vector<double>> w; //forward weights matrix
+	vector<double> S; //leading matrix
+	vector<double> Z; //output matrix
+
+	Layer();
 	~Layer();
 
 	void sigmoid();

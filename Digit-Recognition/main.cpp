@@ -12,4 +12,11 @@ int main()
 	digit.image = data.images[50];
 
 	cout << digit.ToString() << endl;
+
+	OutputLayer outputLayer(10);
+	HiddenLayer test(800, outputLayer);
+
+
+	cout << &outputLayer << endl;
+	cout << test.nextLayer << endl;
 }

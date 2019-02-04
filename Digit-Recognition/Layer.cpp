@@ -1,36 +1,31 @@
 #include "pch.h"
 #include "Layer.h"
 
-
-Layer::Layer(int r, int c)
+Layer::Layer()
 {
-	rows = r;
-	cols = c;
-
-	vector<double> temp;
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			temp.push_back(0);
-		}
-		w.push_back(temp);
-
-	}
 }
-
 
 Layer::~Layer()
 {
+	for (int i = 0; i < neurons; i++)
+	{
+		w[i].clear();
+		S[i].clear();
+		Z[i].clear();
+
+	}
+	w.clear();
+	S.clear();
+	Z.clear();
 }
 
 void Layer::sigmoid()
 {
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			Z[i][j] = 1.0 / (1.0 / -exp(-S[i][j]));
-		}
-	}
+	//for (int i = 0; i < S.size(); i++)
+	//{
+	//	for (int j = 0; j < S[0].size(); j++)
+	//	{
+	//		Z[i][j] = 1.0 / (1.0 / -exp(-S[i][j]));
+	//	}
+	//}
 }
