@@ -41,3 +41,16 @@ void Data::readMnist() {
 	}
 	cout << "\r100 %" << endl;
 }
+
+Digit & Data::operator[](int idx)
+{
+	digit.label = labels[idx];
+	for (int i = 0; i < 28; i++)
+	{
+		for (int j = 0; j < 28; j++)
+		{
+			digit.image[i][j] = images[idx][i][j];
+		}
+	}
+	return digit;
+}

@@ -11,6 +11,7 @@ public:
 	InputLayer(Layer&);
 	~InputLayer();
 
-	void LoadDigit(Digit&);
+	void forward();
+	void loadDigit(Digit&);
 };
 

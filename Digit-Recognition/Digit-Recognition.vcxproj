@@ -151,7 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Constants.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="Data.h" />
     <ClInclude Include="Digit.h" />
     <ClInclude Include="HiddenLayer.h" />

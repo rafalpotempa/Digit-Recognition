@@ -5,20 +5,21 @@ InputLayer::InputLayer(Layer &_nextLayer)
 {
 	neurons = 784;
 	nextLayer = &_nextLayer;
+	_nextLayer.previousLayer = this;
 
 	outputs = nextLayer->neurons;
 	nextLayer->inputs = neurons;
 
-	for (int i = 0; i < neurons; i++)
+	for (int i = 0; i < outputs; i++)
 		S.push_back(0);
 
 	Z = S;
 
 	vector<double> temp;
-	for (int i = 0; i < outputs; i++)
+	for (int i = 0; i < neurons; i++)
 	{
 		temp.clear();
-		for (int j = 0; j < neurons; j++)
+		for (int j = 0; j < outputs; j++)
 		{
 			temp.push_back(rand() % 600 / 1000.0);
 		}
@@ -28,9 +29,22 @@ InputLayer::InputLayer(Layer &_nextLayer)
 
 InputLayer::~InputLayer()
 {
+	X.clear();
 }
 
-void InputLayer::LoadDigit(Digit &digit)
+void InputLayer::forward()
+{
+	for (int i = 0; i < outputs; i++)
+	{
+		for (int j = 0; j < neurons; j++)
+		{
+			S[i] += X[j] * w[j][i];
+		}
+	}
+	sigmoid();
+}
+
+void InputLayer::loadDigit(Digit &digit)
 {
 	for (int i = 0; i < 28; i++)
 	{

@@ -6,6 +6,8 @@ class OutputLayer :
 {
 public:
 	OutputLayer(int);
-	~OutputLayer();
-};
 
+	void forward();
+	void softMax();
+	friend ostream& operator<<(ostream&, OutputLayer&);
+};

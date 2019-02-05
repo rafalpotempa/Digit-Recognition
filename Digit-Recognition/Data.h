@@ -3,7 +3,7 @@
 #include <fstream>
 #include <vector>
 #include "Digit.h"
-#include "Constants.h"
+#include "Global.h"
 
 class Data {
 	ifstream imagesFile;
@@ -18,4 +18,5 @@ public:
 
 	~Data();
 	void readMnist();
+	Digit& operator[](int);
 };

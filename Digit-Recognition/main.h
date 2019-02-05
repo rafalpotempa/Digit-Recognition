@@ -1,8 +1,7 @@
 #pragma once
 #include <iostream>
 #include <stdlib.h>
-
-#include "Constants.h"
+#include "Global.h"
 #include "Digit.h"
 #include "Data.h"
 #include "Layer.h"

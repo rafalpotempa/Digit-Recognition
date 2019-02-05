@@ -1,7 +1,8 @@
 #pragma once
-#include <math.h>
 #include <vector>
-#include "Constants.h"
+#include <fstream>
+#include <math.h>
+#include "Global.h"
 
 class Layer
 {
@@ -11,6 +12,7 @@ public:
 	int outputs = 0;
 
 	Layer* nextLayer;
+	Layer* previousLayer;
 
 	vector<vector<double>> w; //forward weights matrix
 	vector<double> S; //leading matrix

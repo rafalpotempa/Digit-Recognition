@@ -1,6 +1,7 @@
 #define ubyte unsigned char
 
 #pragma once
+#include <iostream>
 #include <string>
 
 using namespace std;

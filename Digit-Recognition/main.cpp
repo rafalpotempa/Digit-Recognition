@@ -7,16 +7,20 @@ int main()
 
 	data.readMnist();
 
-	Digit digit;
-	digit.label = data.labels[50];
-	digit.image = data.images[50];
-
-	cout << digit.ToString() << endl;
+	cout << data[11];
 
 	OutputLayer outputLayer(10);
-	HiddenLayer test(800, outputLayer);
+	HiddenLayer hiddenLayer2(80, outputLayer);
+	HiddenLayer hiddenLayer1(200, hiddenLayer2);
+	InputLayer inputLayer(hiddenLayer1);
 
+	inputLayer.loadDigit(data[10]);
 
-	cout << &outputLayer << endl;
-	cout << test.nextLayer << endl;
+	inputLayer.forward();
+	hiddenLayer1.forward();
+	hiddenLayer2.forward();
+	outputLayer.forward();
+
+	cout << outputLayer;
+	system("pause");
 }

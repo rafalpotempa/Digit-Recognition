@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "Constants.h"
+#include "Global.h"
 
 class Digit
 {
@@ -12,6 +12,6 @@ public:
 
 	Digit();
 
-	string ToString();
+	friend ostream& operator<<(ostream&, Digit&);
 };
 

@@ -6,6 +6,5 @@ class HiddenLayer :
 {
 public:
 	HiddenLayer(int, Layer&);
-	~HiddenLayer();
+	void forward();
 };
-
