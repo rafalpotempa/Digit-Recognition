@@ -12,10 +12,14 @@ Layer::~Layer()
 	Z.clear();
 }
 
-void Layer::sigmoid()
+void Layer::sigmoid() //calculating sigmoid and its derivative
 {
-	for (int i = 0; i < outputs; i++)
+	for (int k = 0; k < minibatchSize; k++)
 	{
-		Z[i] = 1.0 / (1.0 + exp(-S[i]));
+		for (int i = 0; i < outputs; i++)
+			Z[k][i] = 1.0 / (1.0 + exp(-S[k][i]));
+
+		for (int i = 0; i < outputs; i++)
+			F[i][k] = (exp(-S[k][i]) / pow(1 + exp(-S[k][i]), 2));
 	}
 }

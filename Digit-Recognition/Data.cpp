@@ -20,16 +20,15 @@ void Data::readMnist() {
 	//loop for reading all images to memory
 	cout << "Reading mnist to memory:" << endl;
 
-
-	for (int m = 0; m < 600; m++)
+	for (int m = 0; m < 60000; m++)
 	{
 		labelsFile.read((char*)&digit.label, sizeof(ubyte));
 
 		labels.push_back(digit.label);
 
-		for (int i = 0; i < 28; i++)
+		for (int i = 0; i < imageSize; i++)
 		{
-			for (int j = 0; j < 28; j++)
+			for (int j = 0; j < imageSize; j++)
 			{
 				imagesFile.read((char*)&digit.image[i][j], sizeof(ubyte));
 			}
@@ -45,9 +44,9 @@ void Data::readMnist() {
 Digit & Data::operator[](int idx)
 {
 	digit.label = labels[idx];
-	for (int i = 0; i < 28; i++)
+	for (int i = 0; i < imageSize; i++)
 	{
-		for (int j = 0; j < 28; j++)
+		for (int j = 0; j < imageSize; j++)
 		{
 			digit.image[i][j] = images[idx][i][j];
 		}

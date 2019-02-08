@@ -10,18 +10,34 @@ HiddenLayer::HiddenLayer(int _neurons, Layer &_nextLayer)
 	outputs = nextLayer->neurons;
 	nextLayer->inputs = neurons;
 
+	vector<double> temp;
 	for (int i = 0; i < outputs; i++)
-		S.push_back(0);
+		temp.push_back(0);
+	for (int i = 0; i < minibatchSize; i++)
+		S.push_back(temp);
 
 	Z = S;
+	
+	//D.size = (S.size)transposed
+	temp.clear();
+	for (int i = 0; i < minibatchSize; i++)
+		temp.push_back(0);
+	for (int i = 0; i < outputs; i++)
+		D.push_back(temp);
 
-	vector<double> temp;
+	F = D;
+
 	for (int i = 0; i < neurons; i++)
 	{
 		temp.clear();
 		for (int j = 0; j < outputs; j++)
 		{
+#if !debug
 			temp.push_back(rand() % 600 / 1000.0);
+#endif
+#if debug
+			temp.push_back(0.6);
+#endif
 		}
 		w.push_back(temp);
 	}
@@ -29,12 +45,57 @@ HiddenLayer::HiddenLayer(int _neurons, Layer &_nextLayer)
 
 void HiddenLayer::forward()
 {
-	for (int i = 0; i < outputs; i++)
+	for (int k = 0; k < minibatchSize; k++)
 	{
-		for (int j = 0; j < neurons; j++)
+		for (int i = 0; i < outputs; i++)
 		{
-			S[i] += previousLayer->Z[j] * w[j][i];
+			S[k][i] = 0; //clear residuals
+
+			for (int j = 0; j < neurons; j++)
+			{
+				S[k][i] += previousLayer->Z[k][j] * w[j][i];
+			}
 		}
 	}
 	sigmoid();
 }
+
+void HiddenLayer::backward()
+{
+	for (int k = 0; k < minibatchSize; k++)
+		for (int i = 0; i < outputs; i++)
+			D[i][k] = 0; //clear residuals
+
+	for (int k = 0; k < minibatchSize; k++)
+	{
+		for (int i = 0; i < outputs; i++)
+		{
+			if (!nextLayer->w.empty())
+			{
+				for (int j = 0; j < nextLayer->outputs; j++)
+					D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k];
+			}
+			else
+				D[i] = nextLayer->D[i];
+		}
+		for (int i = 0; i < outputs; i++)
+			D[i][k] *= F[i][k];
+	}
+}
+
+//void HiddenLayer::update()
+//{
+//	for (int k = 0; k < minibatchSize; k++)
+//	{
+//		for (int i = 0; i < outputs; i++)
+//		{
+//			double deltaW;
+//			for (int j = 0; j < neurons; j++)
+//			{
+//				deltaW -= nextLayer->D[k][j] * Z[j][i];
+//			}
+//			deltaW *= eta;
+//			W[i][j]
+//		}
+//	}
+//}

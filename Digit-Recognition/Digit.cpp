@@ -4,23 +4,20 @@
 Digit::Digit()
 {
 	vector<ubyte> imageRow;
-	for (int i = 0; i < 28; i++)
-	{
-		for (int j = 0; j < 28; j++)
-		{
-			imageRow.push_back(0);
-		}
+	for (int i = 0; i < imageSize; i++)
+		imageRow.push_back(0);
+
+	for (int i = 0; i < imageSize; i++)
 		image.push_back(imageRow);
-	}
 }
 
 ostream & operator<<(ostream &stream, Digit& digit)
 {
 	stream << "Label: " << (int)digit.label << endl;
 
-	for (int i = 0; i < 28; i++)
+	for (int i = 0; i < imageSize; i++)
 	{
-		for (int j = 0; j < 28; j++)
+		for (int j = 0; j < imageSize; j++)
 		{
 			if (digit.image[i][j] > 204)
 				stream << (char)219;

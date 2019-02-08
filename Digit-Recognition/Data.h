@@ -12,11 +12,13 @@ class Data {
 
 	Digit digit;
 
-public:
+public: //!!!!
 	vector<vector<vector<ubyte>>> images;
 	vector<ubyte> labels;
-
+	
+	//!!!!
 	~Data();
+
 	void readMnist();
 	Digit& operator[](int);
 };

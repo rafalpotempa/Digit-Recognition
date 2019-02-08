@@ -7,4 +7,6 @@ class HiddenLayer :
 public:
 	HiddenLayer(int, Layer&);
 	void forward();
+	void backward();
+	void update();
 };

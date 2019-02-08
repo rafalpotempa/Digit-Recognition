@@ -158,6 +158,8 @@
     <ClInclude Include="InputLayer.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="Minibatch.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="OutputLayer.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -168,6 +170,8 @@
     <ClCompile Include="InputLayer.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Minibatch.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutputLayer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -8,3 +8,4 @@
 #include "InputLayer.h"
 #include "OutputLayer.h"
 #include "HiddenLayer.h"
+#include "Minibatch.h"
