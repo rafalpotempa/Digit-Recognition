@@ -7,14 +7,18 @@ class OutputLayer :
 {
 public:
 	vector<vector<double>> Y; //desired output matrix
+	vector<vector<double>> P; //probabilities matrix
+	unsigned int minibatchNumber;
 
-	OutputLayer();
+	OutputLayer() {};
 	OutputLayer(int);
 	~OutputLayer();
 
-	void loadMinibatch(Minibatch&);
 	void forward();
-	void softMax();
 	void backward();
+
+	void softMax();
+	void crossEntropy();
+	double squareError();
 	friend ostream& operator<<(ostream&, OutputLayer&);
 };

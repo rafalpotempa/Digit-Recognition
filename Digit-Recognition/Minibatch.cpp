@@ -18,6 +18,7 @@ Minibatch::~Minibatch()
 
 Minibatch & Minibatch::operator()(int n) //returns minibatch number 'n' from data
 {
+	minibatchNumber = n;
 	Digit temp;
 	digits.clear();
 	for (int k = 0; k < minibatchSize; k++)

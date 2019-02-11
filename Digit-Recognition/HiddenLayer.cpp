@@ -32,12 +32,8 @@ HiddenLayer::HiddenLayer(int _neurons, Layer &_nextLayer)
 		temp.clear();
 		for (int j = 0; j < outputs; j++)
 		{
-#if !debug
-			temp.push_back(rand() % 600 / 1000.0);
-#endif
-#if debug
-			temp.push_back(0.6);
-#endif
+			temp.push_back(rand() % 1200 / 1000.0 - 0.6);
+			//temp.push_back(0.6);
 		}
 		w.push_back(temp);
 	}
@@ -73,29 +69,22 @@ void HiddenLayer::backward()
 			if (!nextLayer->w.empty())
 			{
 				for (int j = 0; j < nextLayer->outputs; j++)
-					D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k];
+					D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k] * F[i][k];
 			}
 			else
 				D[i] = nextLayer->D[i];
 		}
-		for (int i = 0; i < outputs; i++)
-			D[i][k] *= F[i][k];
 	}
 }
 
-//void HiddenLayer::update()
-//{
-//	for (int k = 0; k < minibatchSize; k++)
-//	{
-//		for (int i = 0; i < outputs; i++)
-//		{
-//			double deltaW;
-//			for (int j = 0; j < neurons; j++)
-//			{
-//				deltaW -= nextLayer->D[k][j] * Z[j][i];
-//			}
-//			deltaW *= eta;
-//			W[i][j]
-//		}
-//	}
-//}
+void HiddenLayer::update()
+{
+	for (int k = 0; k < minibatchSize; k++)
+	{
+		for (int i = 0; i < neurons; i++)
+		{
+			for (int j = 0; j < outputs; j++)
+				w[i][j] += -eta * D[j][k] * Z[k][j];
+		}
+	}
+}

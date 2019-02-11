@@ -25,5 +25,8 @@ public:
 	~Layer();
 
 	void sigmoid();
+	virtual void forward() {};
+	virtual void backward() {};
+	virtual void update() {};
 };
 

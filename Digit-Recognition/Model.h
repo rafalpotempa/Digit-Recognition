@@ -13,9 +13,10 @@ public:
 	Model();
 	~Model();
 
-	vector<Layer*> layers;
 	Data* data;
+	Minibatch* batch;
+	vector<Layer*> layers;
 
-	void train(int);
+	void train(unsigned int, bool output = false);
 };
 

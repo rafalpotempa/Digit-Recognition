@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <stdlib.h>
 #include "Global.h"
 #include "Digit.h"
@@ -9,3 +8,4 @@
 #include "OutputLayer.h"
 #include "HiddenLayer.h"
 #include "Minibatch.h"
+#include "Model.h"
