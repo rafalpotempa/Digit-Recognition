@@ -9,3 +9,4 @@
 #include "HiddenLayer.h"
 #include "Minibatch.h"
 #include "Model.h"
+#include "ConsoleColor.h"

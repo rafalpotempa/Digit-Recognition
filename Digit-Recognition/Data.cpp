@@ -34,8 +34,8 @@ void Data::readMnist() {
 			}
 		}
 		images.push_back(digit.image);
-		if (m % 600 == 0) {
-			cout << "\r" << m / 600 << " %";
+		if (m % (datasetSize/100 + 1) == 0) {
+			cout << "\r" << m / (datasetSize / 100 + 1) << " %";
 		}
 	}
 	cout << "\r100 %" << endl;

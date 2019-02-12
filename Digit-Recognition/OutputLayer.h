@@ -1,6 +1,7 @@
 #pragma once
 #include "Layer.h"
 #include "Minibatch.h"
+#include "ConsoleColor.h"
 
 class OutputLayer :
 	public Layer
@@ -8,6 +9,7 @@ class OutputLayer :
 public:
 	vector<vector<double>> Y; //desired output matrix
 	vector<vector<double>> P; //probabilities matrix
+	vector<double> previousError;
 	unsigned int minibatchNumber;
 
 	OutputLayer() {};
@@ -18,7 +20,6 @@ public:
 	void backward();
 
 	void softMax();
-	void crossEntropy();
 	double squareError();
 	friend ostream& operator<<(ostream&, OutputLayer&);
 };

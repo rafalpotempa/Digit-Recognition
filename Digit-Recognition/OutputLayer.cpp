@@ -24,6 +24,9 @@ OutputLayer::OutputLayer(int _neurons)
 		D.push_back(temp);
 
 	F = D;
+
+	for (int k = 0; k < datasetSize / minibatchSize; k++)
+		previousError.push_back(0);
 }
 
 OutputLayer::~OutputLayer()
@@ -88,8 +91,8 @@ void OutputLayer::backward()
 
 ostream & operator<<(ostream & stream, OutputLayer & outputLayer)
 {
-	stream.precision(2);
-	stream << outputLayer.minibatchNumber << ": \t";
+	double previousError = outputLayer.previousError[outputLayer.minibatchNumber];
+	double currentError = outputLayer.squareError();
 
 	if (minibatchSize <= 10)
 	{
@@ -106,9 +109,27 @@ ostream & operator<<(ostream & stream, OutputLayer & outputLayer)
 				}
 			}
 		}
+
 		stream.precision(4);
-		stream << "\t" << outputLayer.squareError() << endl;
-		stream.precision(4);
+		stream << "\t";
+
+		//printing formatted square error
+		stream << fixed << currentError;
+
+		//printing change of squre error
+		if (previousError != 0)
+		{
+			stream << " (";
+			if (previousError > currentError)
+				stream << green;
+			else if (previousError < currentError)
+				stream << red << "+";
+			else
+				stream << white;
+			stream << currentError - previousError << white << ")";
+		}
+		stream << endl;
+		stream.precision(2);
 		stream << "\t";
 
 		
@@ -152,10 +173,26 @@ ostream & operator<<(ostream & stream, OutputLayer & outputLayer)
 		}
 		stream << endl;
 	}
-	else
+	else //case for large minibatches
 	{
 		stream.precision(4);
-		stream << "Square error: " << outputLayer.squareError() << endl;
+		//printing formatted square error
+		stream << "Square error: ";
+		stream << fixed << currentError;
+
+		//printing change of squre error
+		if (previousError != 0)
+		{
+			stream << " (";
+			if (previousError > currentError)
+				stream << green;
+			else if (previousError < currentError)
+				stream << red << "+";
+			else
+				stream << white;
+			stream << currentError - previousError << white << ")";
+		}
+		stream << endl;
 	}
 	return stream;
 }

@@ -26,7 +26,6 @@ int main()
 	{
 		model.train(100, true);
 	}
-	cout << outputLayer;
 
 #endif
 	
