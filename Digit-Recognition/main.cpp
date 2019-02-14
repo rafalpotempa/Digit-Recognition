@@ -22,10 +22,7 @@ int main()
 	model.layers.push_back(&hiddenLayer2);
 	model.layers.push_back(&outputLayer);
 
-	for (int k = 0; k < datasetSize/minibatchSize; k++)
-	{
-		model.train(100, true);
-	}
+	model.train(150, true);
 
 #endif
 	

@@ -39,17 +39,16 @@ void Model::train(unsigned int epochs, bool output) //run model for given number
 			for (unsigned int i = 0; i < strlen("backpropagation..."); i++)
 				cout << "\b \b";
 			
-			cout << "update...";
-			for (unsigned int i = 0; i < layers.size(); i++)
-				layers[i]->update();
-			for (unsigned int i = 0; i < strlen("update..."); i++)
-				cout << "\b \b";
-
 			if (output)
 				cout << outputLayer;
 
 			outputLayer.previousError[k] = outputLayer.squareError();
 		}
+		cout << "update...";
+		for (unsigned int i = 0; i < layers.size(); i++)
+			layers[i]->update();
+		for (unsigned int i = 0; i < strlen("update..."); i++)
+			cout << "\b \b";
 	}
 }
 

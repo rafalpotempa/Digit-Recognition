@@ -58,9 +58,7 @@ void HiddenLayer::forward()
 
 void HiddenLayer::backward()
 {
-	for (int k = 0; k < minibatchSize; k++)
-		for (int i = 0; i < outputs; i++)
-			D[i][k] = 0; //clear residuals
+	//clearing is done after update
 
 	for (int k = 0; k < minibatchSize; k++)
 	{
@@ -72,13 +70,18 @@ void HiddenLayer::backward()
 					D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k] * F[i][k];
 			}
 			else
-				D[i] = nextLayer->D[i];
+				for (int j = 0; j < nextLayer->outputs; j++)
+					D[i][k] += nextLayer->D[i][k];
 		}
 	}
 }
 
 void HiddenLayer::update()
 {
+	for (int k = 0; k < minibatchSize; k++)
+		for (int i = 0; i < outputs; i++)
+			D[i][k] /= datasetSize/minibatchSize; //mean for all minibatches
+
 	for (int k = 0; k < minibatchSize; k++)
 	{
 		for (int i = 0; i < neurons; i++)
@@ -87,4 +90,8 @@ void HiddenLayer::update()
 				w[i][j] += -eta * D[j][k] * Z[k][j];
 		}
 	}
+
+	for (int k = 0; k < minibatchSize; k++)
+		for (int i = 0; i < outputs; i++)
+			D[i][k] = 0; //clear residuals
 }

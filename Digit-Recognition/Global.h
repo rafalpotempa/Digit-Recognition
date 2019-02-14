@@ -1,8 +1,8 @@
 #define debug false
 #if !debug
 #define imageSize 28
-#define minibatchSize 100
-#define datasetSize 1000
+#define minibatchSize 1
+#define datasetSize 5
 #endif
 #if debug
 #define imageSize 2
@@ -21,4 +21,4 @@ using namespace std;
 
 static string trainingImages = "mnist/train-images.idx3-ubyte";
 static string trainingLabels = "mnist/train-labels.idx1-ubyte";
-static double eta = 0.001; //learning rate
+static double eta = 0.01; //learning rate

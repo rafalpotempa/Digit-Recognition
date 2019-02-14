@@ -65,10 +65,6 @@ void InputLayer::forward()
 void InputLayer::backward()
 {
 	for (int k = 0; k < minibatchSize; k++)
-		for (int i = 0; i < outputs; i++)
-			D[i][k] = 0; //clear residuals
-
-	for (int k = 0; k < minibatchSize; k++)
 	{
 		for (int i = 0; i < outputs; i++)
 		{
@@ -81,6 +77,10 @@ void InputLayer::backward()
 void InputLayer::update()
 {
 	for (int k = 0; k < minibatchSize; k++)
+		for (int i = 0; i < outputs; i++)
+			D[i][k] /= datasetSize/minibatchSize; //mean for all minibatches
+
+	for (int k = 0; k < minibatchSize; k++)
 	{
 		for (int i = 0; i < neurons; i++)
 		{
@@ -88,6 +88,10 @@ void InputLayer::update()
 				w[i][j] += -eta * D[j][k] * X[k][i];
 		}
 	}
+
+	for (int k = 0; k < minibatchSize; k++)
+		for (int i = 0; i < outputs; i++)
+			D[i][k] = 0; //clear residuals
 }
 
 
