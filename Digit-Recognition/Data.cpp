@@ -20,7 +20,7 @@ void Data::readMnist() {
 	//loop for reading all images to memory
 	cout << "Reading mnist to memory:" << endl;
 
-	for (int m = 0; m < 60000; m++)
+	for (int m = 0; m < datasetSize; m++)
 	{
 		labelsFile.read((char*)&digit.label, sizeof(ubyte));
 
@@ -34,8 +34,8 @@ void Data::readMnist() {
 			}
 		}
 		images.push_back(digit.image);
-		if (m % 600 == 0) {
-			cout << "\r" << m / 600 << " %";
+		if (m % (datasetSize/100 + 1) == 0) {
+			cout << "\r" << m / (datasetSize / 100 + 1) << " %";
 		}
 	}
 	cout << "\r100 %" << endl;

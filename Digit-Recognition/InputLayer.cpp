@@ -33,12 +33,8 @@ InputLayer::InputLayer(Layer &_nextLayer)
 		temp.clear();
 		for (int j = 0; j < outputs; j++)
 		{
-#if !debug
-			temp.push_back(rand() % 600 / 1000.0);
-#endif
-#if debug
-			temp.push_back(0.6);
-#endif
+			temp.push_back(rand() % 1200 / 1000.0 - 0.6);
+			//temp.push_back(0.6);
 		}
 		w.push_back(temp);
 	}
@@ -77,10 +73,20 @@ void InputLayer::backward()
 		for (int i = 0; i < outputs; i++)
 		{
 			for (int j = 0; j < nextLayer->outputs; j++)
-				D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k];
+				D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k] * F[i][k];
 		}
-		for (int i = 0; i < outputs; i++)
-			D[i][k] *= F[i][k];
+	}
+}
+
+void InputLayer::update()
+{
+	for (int k = 0; k < minibatchSize; k++)
+	{
+		for (int i = 0; i < neurons; i++)
+		{
+			for (int j = 0; j < outputs; j++)
+				w[i][j] += -eta * D[j][k] * X[k][i];
+		}
 	}
 }
 
@@ -93,7 +99,7 @@ void InputLayer::loadDigit(Digit &digit)
 	{
 		for (int j = 0; j < imageSize; j++)
 		{
-			temp.push_back(digit.image[i][j]);
+			temp.push_back(digit.image[i][j] / 256.0);
 		}
 	}
 	X.push_back(temp);
@@ -110,10 +116,39 @@ void InputLayer::loadMinibatch(Minibatch &minibatch)
 		{
 			for (int j = 0; j < imageSize; j++)
 			{
-				temp.push_back(minibatch[k].image[i][j]);
+				temp.push_back(minibatch[k].image[i][j] / 256.0);
 			}
 		}
 		X.push_back(temp);
+	}
+
+
+	// output layer output initialization
+	Layer* search = nextLayer;
+	while (search->nextLayer)
+		search = search->nextLayer;
+
+	OutputLayer *_output;
+	_output = dynamic_cast<OutputLayer*>(search);
+
+	_output->minibatchNumber = minibatch.minibatchNumber;
+	
+	for (int k = 0; k < minibatchSize; k++)
+	{
+		for (int i = 0; i < _output->outputs; i++)
+		{
+			_output->Y[k][i] = 0.0;
+		}
+	}
+	for (int k = 0; k < minibatchSize; k++)
+	{
+		for (int i = 0; i < _output->outputs; i++)
+		{
+			if (i == minibatch.digits[k].label)
+			{
+				_output->Y[k][i] = 1.0;
+			}
+		}
 	}
 }
 

@@ -14,6 +14,8 @@ public:
 
 	void forward();
 	void backward();
+	void update();
+
 	void loadDigit(Digit&);
 	void loadMinibatch(Minibatch&);
 };

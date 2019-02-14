@@ -1,10 +1,6 @@
 #include "pch.h"
 #include "OutputLayer.h"
 
-OutputLayer::OutputLayer()
-{
-}
-
 OutputLayer::OutputLayer(int _neurons)
 {
 	neurons = _neurons;
@@ -18,6 +14,7 @@ OutputLayer::OutputLayer(int _neurons)
 
 	Z = S;
 	Y = S;
+	P = S;
 
 	//D.size = (S.size)transposed 
 	temp.clear();
@@ -27,25 +24,14 @@ OutputLayer::OutputLayer(int _neurons)
 		D.push_back(temp);
 
 	F = D;
+
+	for (int k = 0; k < datasetSize / minibatchSize; k++)
+		previousError.push_back(0);
 }
 
 OutputLayer::~OutputLayer()
 {
 	Y.clear();
-}
-
-void OutputLayer::loadMinibatch(Minibatch & minibatch)
-{
-	for (int k = 0; k < minibatchSize; k++)
-	{
-		for (int i = 0; i < outputs; i++)
-		{
-			if (i == minibatch.digits[k].label)
-			{
-				Y[k][i] = 1.0;
-			}
-		}
-	}
 }
 
 void OutputLayer::forward()
@@ -66,14 +52,30 @@ void OutputLayer::softMax()
 	for (int k = 0; k < minibatchSize; k++)
 	{
 		sum = 0;
+
 		for (int i = 0; i < outputs; i++)
 			sum += exp(previousLayer->Z[k][i]);
 
 		for (int i = 0; i < outputs; i++)
-		{
-			Z[k][i] = exp(previousLayer->Z[k][i]) / sum;
-		}
+			Z[k][i] = previousLayer->Z[k][i];
+
+		for (int i = 0; i < outputs; i++)
+			P[k][i] = exp(previousLayer->Z[k][i]) / sum;
+
 	}
+}
+
+double OutputLayer::squareError()
+{
+	double result = 0;
+	for (int k = 0; k < minibatchSize; k++)
+	{
+		for (int i = 0; i < outputs; i++)
+			result += D[i][k] * D[i][k];
+		
+		result *= 0.5;
+	}
+	return result;
 }
 
 void OutputLayer::backward()
@@ -89,24 +91,108 @@ void OutputLayer::backward()
 
 ostream & operator<<(ostream & stream, OutputLayer & outputLayer)
 {
-	double max;
-	for (int k = 0; k < minibatchSize; k++)
+	double previousError = outputLayer.previousError[outputLayer.minibatchNumber];
+	double currentError = outputLayer.squareError();
+
+	if (minibatchSize <= 10)
 	{
-		max = 0;
-		for (int i = 0; i < outputLayer.outputs; i++)
-			if (outputLayer.Z[k][i] > max)
-				max = outputLayer.Z[k][i];
+		double max;
 
-		for (int i = 0; i < outputLayer.outputs; i++)
+		for (int k = 0; k < minibatchSize; k++)
 		{
-			stream << i << ":  " << outputLayer.S[k][i] << "\t" << outputLayer.Z[k][i] * 100.0 << "%";
-			if (outputLayer.Z[k][i] == max)
-				stream << " <- ";
+			for (int i = 0; i < outputLayer.outputs; i++)
+			{
+				if (outputLayer.Y[k][i] == 1)
+				{
+					stream << i << ", ";
+					break;
+				}
+			}
+		}
 
-			stream << endl;
+		stream.precision(4);
+		stream << "\t";
+
+		//printing formatted square error
+		stream << fixed << currentError;
+
+		//printing change of squre error
+		if (previousError != 0)
+		{
+			stream << " (";
+			if (previousError > currentError)
+				stream << green;
+			else if (previousError < currentError)
+				stream << red << "+";
+			else
+				stream << white;
+			stream << currentError - previousError << white << ")";
+		}
+		stream << endl;
+		stream.precision(2);
+		stream << "\t";
+
+		
+		for (int k = 0; k < minibatchSize; k++)
+		{
+			max = 0;
+			for (int i = 0; i < outputLayer.outputs; i++)
+				if (outputLayer.Z[k][i] > max)
+					max = outputLayer.Z[k][i];
+
+			for (int i = 0; i < outputLayer.outputs; i++)
+			{
+				if (outputLayer.Z[k][i] == max)
+				{
+					stream << i;
+
+					if (k == minibatchSize - 1)
+						stream << " | ";
+					else
+						stream << ", ";
+					break;
+				}
+			}
+		}
+
+		for (int k = 0; k < minibatchSize; k++)
+		{
+			max = 0;
+			for (int i = 0; i < outputLayer.outputs; i++)
+				if (outputLayer.Z[k][i] > max)
+					max = outputLayer.Z[k][i];
+
+			for (int i = 0; i < outputLayer.outputs; i++)
+			{
+				if (outputLayer.Z[k][i] == max)
+				{
+					stream << fixed << outputLayer.P[k][i] * 100 << "% ";
+					break;
+				}
+			}
 		}
 		stream << endl;
 	}
+	else //case for large minibatches
+	{
+		stream.precision(4);
+		//printing formatted square error
+		stream << "Square error: ";
+		stream << fixed << currentError;
 
+		//printing change of squre error
+		if (previousError != 0)
+		{
+			stream << " (";
+			if (previousError > currentError)
+				stream << green;
+			else if (previousError < currentError)
+				stream << red << "+";
+			else
+				stream << white;
+			stream << currentError - previousError << white << ")";
+		}
+		stream << endl;
+	}
 	return stream;
 }
