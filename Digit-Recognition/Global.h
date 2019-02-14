@@ -21,4 +21,4 @@ using namespace std;
 
 static string trainingImages = "mnist/train-images.idx3-ubyte";
 static string trainingLabels = "mnist/train-labels.idx1-ubyte";
-static double eta = 0.01; //learning rate
+static double eta = 0.001; //learning rate
