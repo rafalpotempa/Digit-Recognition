@@ -14,7 +14,7 @@ int main()
 
 	OutputLayer outputLayer(10);
 	HiddenLayer hiddenLayer2(80, outputLayer);
-	HiddenLayer hiddenLayer1(200, hiddenLayer2);
+	HiddenLayer hiddenLayer1(300, hiddenLayer2);
 	InputLayer inputLayer(hiddenLayer1);
 
 	model.layers.push_back(&inputLayer);
@@ -59,16 +59,13 @@ int main()
 	batch.digits.push_back(digit2);
 
 	in.loadMinibatch(batch);
-	out.loadMinibatch(batch);
-
 
 	model.layers.push_back(&in);
 	model.layers.push_back(&hid1);
 	model.layers.push_back(&hid2);
 	model.layers.push_back(&out);
 	
-	model.run(100);
-	cout << out;
+	model.train(100, true);
 #endif
 	system("pause");
 }

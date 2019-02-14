@@ -23,10 +23,10 @@ void Model::train(unsigned int epochs, bool output) //run model for given number
 		cout << "Epoch: " << e + 1 << " / " << epochs << endl;
 		for (int k = 0; k < datasetSize/minibatchSize; k++)
 		{
+#if !debug
 			inputLayer.loadMinibatch(batch->operator()(k));
-
 			cout << outputLayer.minibatchNumber << ":\t";
-
+#endif
 			cout << "forward feed...";
 			for (unsigned int i = 0; i < layers.size(); i++)
 				layers[i]->forward();

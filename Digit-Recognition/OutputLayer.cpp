@@ -57,7 +57,7 @@ void OutputLayer::softMax()
 			sum += exp(previousLayer->Z[k][i]);
 
 		for (int i = 0; i < outputs; i++)
-			Z[k][i] = exp(previousLayer->Z[k][i]) / sum;
+			Z[k][i] = previousLayer->Z[k][i];
 
 		for (int i = 0; i < outputs; i++)
 			P[k][i] = exp(previousLayer->Z[k][i]) / sum;
