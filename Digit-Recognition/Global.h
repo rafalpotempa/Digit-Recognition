@@ -1,7 +1,7 @@
 #define debug false
 #if !debug
 #define imageSize 28
-#define minibatchSize 1
+#define minibatchSize 5
 #define datasetSize 5
 #endif
 #if debug

@@ -8,6 +8,10 @@ Data::~Data()
 }
 
 void Data::readMnist() {
+	ifstream imagesFile;
+	ifstream labelsFile;
+	char temp;
+
 	imagesFile.open(trainingImages, ios::binary);
 	labelsFile.open(trainingLabels, ios::binary);
 
@@ -38,7 +42,7 @@ void Data::readMnist() {
 			cout << "\r" << m / (datasetSize / 100 + 1) << " %";
 		}
 	}
-	cout << "\r100 %" << endl;
+	cout << "\r100 %" << endl << endl;
 }
 
 Digit & Data::operator[](int idx)

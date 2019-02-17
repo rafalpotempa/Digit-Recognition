@@ -6,17 +6,11 @@
 #include "Global.h"
 
 class Data {
-	ifstream imagesFile;
-	ifstream labelsFile;
-	char temp;
-
+public:
 	Digit digit;
-
-public: //!!!!
 	vector<vector<vector<ubyte>>> images;
 	vector<ubyte> labels;
 	
-	//!!!!
 	~Data();
 
 	void readMnist();

@@ -48,7 +48,10 @@ void OutputLayer::forward()
 
 void OutputLayer::softMax()
 {
-	double sum;
+	double sum, max, label, answer;
+
+	numberOfMistakes = 0;
+
 	for (int k = 0; k < minibatchSize; k++)
 	{
 		sum = 0;
@@ -62,6 +65,25 @@ void OutputLayer::softMax()
 		for (int i = 0; i < outputs; i++)
 			P[k][i] = exp(previousLayer->Z[k][i]) / sum;
 
+
+		max = 0;
+		label = -1;
+		answer = -2;
+		for (int i = 0; i < outputs; i++)
+			if (Y[k][i] == 1)
+				label = i;
+
+		for (int i = 0; i < outputs; i++)
+		{
+			if (Z[k][i] > max)
+			{
+				max = Z[k][i];
+				answer = i;
+			}
+		}
+
+		if (answer != label)
+			numberOfMistakes += 1;
 	}
 }
 
@@ -94,7 +116,7 @@ ostream & operator<<(ostream & stream, OutputLayer & outputLayer)
 	double previousError = outputLayer.previousError[outputLayer.minibatchNumber];
 	double currentError = outputLayer.squareError();
 
-	if (minibatchSize <= 10)
+	if (minibatchSize <= 5)
 	{
 		double max;
 
@@ -128,10 +150,14 @@ ostream & operator<<(ostream & stream, OutputLayer & outputLayer)
 				stream << white;
 			stream << currentError - previousError << white << ")";
 		}
-		stream << endl;
-		stream.precision(2);
-		stream << "\t";
+		else
+			stream << "\t";
 
+		//number of correct guesses
+		stream << "\t" << minibatchSize - outputLayer.numberOfMistakes << " / " << minibatchSize;
+
+		stream.precision(2);
+		stream << endl << "\t";
 		
 		for (int k = 0; k < minibatchSize; k++)
 		{
@@ -192,6 +218,11 @@ ostream & operator<<(ostream & stream, OutputLayer & outputLayer)
 				stream << white;
 			stream << currentError - previousError << white << ")";
 		}
+		else
+			stream << "\t";
+		//number of correct guesses
+		stream << "\t" << minibatchSize - outputLayer.numberOfMistakes << " / " << minibatchSize;
+
 		stream << endl;
 	}
 	return stream;

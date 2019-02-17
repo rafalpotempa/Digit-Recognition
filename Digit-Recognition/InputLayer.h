@@ -9,6 +9,7 @@ class InputLayer :
 public:
 	vector<vector<double>> X; //input matrix
 
+	InputLayer() {};
 	InputLayer(Layer&);
 	~InputLayer();
 

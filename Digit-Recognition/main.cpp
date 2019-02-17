@@ -3,27 +3,31 @@
 
 int main()
 {
+	//string answer;
+	//cout << "Initialise network from file? [\"yes\"/\"no\"]  ";
+	//cin >> answer;
+
+	//if (answer == "yes")
+	//{
+	//	cout << "good" << endl;
+	//}
+	//else if (answer == "no")
+	//{
+	//	cout << "also good" << endl;
+	//}
+
 #if !debug
 
 	Data data;
 	Minibatch batch(data);
-	Model model;
+	Model model("784-128-16-10 eta=0.010000.nn");
 	model.batch = &batch;
 
 	data.readMnist();
 
-	OutputLayer outputLayer(10);
-	HiddenLayer hiddenLayer2(80, outputLayer);
-	HiddenLayer hiddenLayer1(300, hiddenLayer2);
-	InputLayer inputLayer(hiddenLayer1);
-
-	model.layers.push_back(&inputLayer);
-	model.layers.push_back(&hiddenLayer1);
-	model.layers.push_back(&hiddenLayer2);
-	model.layers.push_back(&outputLayer);
-
-	model.train(150, true);
-
+	model.train(10, true);
+	model.saveToFile();
+	
 #endif
 	
 #if debug
