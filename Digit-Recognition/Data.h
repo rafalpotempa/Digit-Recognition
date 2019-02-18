@@ -11,6 +11,7 @@ public:
 	vector<vector<vector<ubyte>>> images;
 	vector<ubyte> labels;
 	
+	Data() {};
 	~Data();
 
 	void readMnist();

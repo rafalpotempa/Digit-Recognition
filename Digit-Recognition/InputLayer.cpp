@@ -2,6 +2,7 @@
 #include "InputLayer.h"
 #include "OutputLayer.h"
 
+
 InputLayer::InputLayer(Layer &_nextLayer)
 {
 	neurons = imageSize*imageSize;
@@ -69,7 +70,14 @@ void InputLayer::backward()
 		for (int i = 0; i < outputs; i++)
 		{
 			for (int j = 0; j < nextLayer->outputs; j++)
-				D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k] * F[i][k];
+				if (!nextLayer->w.empty())
+				{
+					for (int j = 0; j < nextLayer->outputs; j++)
+						D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k] * F[i][k];
+				}
+				else
+					for (int j = 0; j < nextLayer->outputs; j++)
+						D[i][k] += nextLayer->D[i][k];
 		}
 	}
 }

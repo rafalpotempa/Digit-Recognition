@@ -14,14 +14,14 @@ class Model
 {
 public:
 	Model() {};
+	Model(vector<int>);
 	Model(string);
 	~Model() {};
 
-	Data* data;
 	Minibatch* batch;
 	vector<Layer*> layers;
 
-	void saveToFile();
 	void train(unsigned int, bool output = false);
+	void saveToFile();
 };
 

@@ -1,11 +1,6 @@
 #include "pch.h"
 #include "Minibatch.h"
 
-
-Minibatch::Minibatch()
-{
-}
-
 Minibatch::Minibatch(Data& _data)
 {
 	data = &_data;

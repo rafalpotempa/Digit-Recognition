@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Model.h"
 
-
 Model::Model(string path)
 {
 	fstream file;
@@ -13,7 +12,6 @@ Model::Model(string path)
 		file.close();
 		return;
 	}
-
 
 	string line;
 	getline(file, line);
@@ -43,7 +41,7 @@ Model::Model(string path)
 	}
 	else
 	{
-		InputLayer inputLayer(outputLayer);
+		static InputLayer inputLayer(outputLayer);
 		layers.push_back(&inputLayer);
 		layers.push_back(&outputLayer);
 	}
@@ -64,50 +62,34 @@ Model::Model(string path)
 	cout << "Model loaded from \"" << path << "\"" << endl << endl;
 }
 
-
-void Model::saveToFile()
+Model::Model(vector<int> layerSizes)
 {
-	string path = "";
-	ofstream file;
+	static OutputLayer outputLayer(layerSizes.back());
 
-	for (size_t i = 0; i < layers.size(); i++)
+	if (layerSizes.size() > 2)
 	{
-		path += to_string(layers[i]->neurons);
+		vector<HiddenLayer*> hiddenLayers;
 
-		if (i != (layers.size() - 1))
-			path += "-";
-	}
-	path += " eta=";
-	path += to_string(eta);
-	path += ".nn";
-
-	file.open(path, fstream::out);
-	if (!file.is_open())
-	{
-		cerr << "<\"" << path << "\" cannot be opened>" << endl;
-		file.open(path, fstream::out | fstream::trunc);
-	}
-
-	for (size_t i = 0; i < layers.size(); i++)
-		file << layers[i]->neurons << " ";
-	
-	file << endl << endl;
-
-	for (size_t k = 0; k < layers.size() - 1; k++)
-	{
-		for (int i = 0; i < layers[k]->neurons; i++)
+		for (size_t i = 2; i < layerSizes.size(); i++)
 		{
-			for (int j = 0; j < layers[k]->outputs; j++)
-			{
-				file << layers[k]->w[i][j] << "\t";
-			}
-			file << endl;
+			if (i == 2)
+				hiddenLayers.push_back(new HiddenLayer(layerSizes[layerSizes.size() - i], outputLayer));
+			else
+				hiddenLayers.push_back(new HiddenLayer(layerSizes[layerSizes.size() - i], *hiddenLayers.back()));
 		}
-		file << endl;
-	}
 
-	file.close();
-	cout << endl << "Model saved to: \"" << path << "\"" << endl << endl;
+		static InputLayer inputLayer(*hiddenLayers.back());
+		layers.push_back(&inputLayer);
+		for (int i = hiddenLayers.size() - 1; i >= 0; i--)
+			layers.push_back(hiddenLayers[i]);
+		layers.push_back(&outputLayer);
+	}
+	else
+	{
+		static InputLayer inputLayer(outputLayer);
+		layers.push_back(&inputLayer);
+		layers.push_back(&outputLayer);
+	}
 }
 
 void Model::train(unsigned int epochs, bool output) //run model for given number of epochs
@@ -148,3 +130,46 @@ void Model::train(unsigned int epochs, bool output) //run model for given number
 	}
 }
 
+void Model::saveToFile()
+{
+	string path = "";
+	ofstream file;
+
+	for (size_t i = 0; i < layers.size(); i++)
+	{
+		path += to_string(layers[i]->neurons);
+
+		if (i != (layers.size() - 1))
+			path += "-";
+	}
+	path += ".nn";
+
+	file.open(path, fstream::out);
+	if (!file.is_open())
+	{
+		cerr << "<\"" << path << "\" cannot be opened>" << endl;
+		file.open(path, fstream::out | fstream::trunc);
+
+	}
+
+	for (size_t i = 0; i < layers.size(); i++)
+		file << layers[i]->neurons << " ";
+
+	file << endl << endl;
+
+	for (size_t k = 0; k < layers.size() - 1; k++)
+	{
+		for (int i = 0; i < layers[k]->neurons; i++)
+		{
+			for (int j = 0; j < layers[k]->outputs; j++)
+			{
+				file << layers[k]->w[i][j] << "\t";
+			}
+			file << endl;
+		}
+		file << endl;
+	}
+
+	file.close();
+	cout << endl << "Model saved to: \"" << path << "\"" << endl << endl;
+}

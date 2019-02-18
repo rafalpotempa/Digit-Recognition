@@ -21,7 +21,7 @@ public:
 	vector<vector<double>> F; //derivative values matrix
 	vector<vector<double>> D; //error signals matrix
 	
-	Layer();
+	Layer() {};
 	~Layer();
 
 	void sigmoid();
