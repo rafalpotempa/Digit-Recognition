@@ -2,6 +2,7 @@
 #include "InputLayer.h"
 #include "OutputLayer.h"
 
+
 InputLayer::InputLayer(Layer &_nextLayer)
 {
 	neurons = imageSize*imageSize;
@@ -65,21 +66,28 @@ void InputLayer::forward()
 void InputLayer::backward()
 {
 	for (int k = 0; k < minibatchSize; k++)
-		for (int i = 0; i < outputs; i++)
-			D[i][k] = 0; //clear residuals
-
-	for (int k = 0; k < minibatchSize; k++)
 	{
 		for (int i = 0; i < outputs; i++)
 		{
 			for (int j = 0; j < nextLayer->outputs; j++)
-				D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k] * F[i][k];
+				if (!nextLayer->w.empty())
+				{
+					for (int j = 0; j < nextLayer->outputs; j++)
+						D[i][k] += nextLayer->w[i][j] * nextLayer->D[j][k] * F[i][k];
+				}
+				else
+					for (int j = 0; j < nextLayer->outputs; j++)
+						D[i][k] += nextLayer->D[i][k];
 		}
 	}
 }
 
 void InputLayer::update()
 {
+	for (int k = 0; k < minibatchSize; k++)
+		for (int i = 0; i < outputs; i++)
+			D[i][k] /= datasetSize/minibatchSize; //mean for all minibatches
+
 	for (int k = 0; k < minibatchSize; k++)
 	{
 		for (int i = 0; i < neurons; i++)
@@ -88,6 +96,10 @@ void InputLayer::update()
 				w[i][j] += -eta * D[j][k] * X[k][i];
 		}
 	}
+
+	for (int k = 0; k < minibatchSize; k++)
+		for (int i = 0; i < outputs; i++)
+			D[i][k] = 0; //clear residuals
 }
 
 

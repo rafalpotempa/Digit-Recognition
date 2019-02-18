@@ -1,24 +1,18 @@
-#define debug false
-#if !debug
-#define imageSize 28
-#define minibatchSize 100
-#define datasetSize 1000
-#endif
-#if debug
-#define imageSize 2
-#define minibatchSize 2
-#define datasetSize 2
-#endif
-
-#define ubyte unsigned char
-
 #pragma once
 #include <iostream>
 #include <string>
 #include <vector>
 
+#define ubyte unsigned char
+
 using namespace std;
 
 static string trainingImages = "mnist/train-images.idx3-ubyte";
 static string trainingLabels = "mnist/train-labels.idx1-ubyte";
-static double eta = 0.001; //learning rate
+
+static int imageSize = 28;
+
+extern int minibatchSize;
+extern int datasetSize;
+extern int numberOfEpochs;
+extern double eta;

@@ -11,7 +11,7 @@ public:
 	vector<Digit> digits;
 	unsigned int minibatchNumber = 0;
 
-	Minibatch();
+	Minibatch() {};
 	Minibatch(Data&);
 	~Minibatch();
 

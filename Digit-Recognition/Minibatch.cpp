@@ -1,11 +1,6 @@
 #include "pch.h"
 #include "Minibatch.h"
 
-
-Minibatch::Minibatch()
-{
-}
-
 Minibatch::Minibatch(Data& _data)
 {
 	data = &_data;
@@ -19,8 +14,9 @@ Minibatch::~Minibatch()
 Minibatch & Minibatch::operator()(int n) //returns minibatch number 'n' from data
 {
 	minibatchNumber = n;
-	Digit temp;
 	digits.clear();
+	
+	Digit temp;
 	for (int k = 0; k < minibatchSize; k++)
 	{
 		temp.label = data->labels[n*minibatchSize + k];

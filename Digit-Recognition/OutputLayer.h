@@ -11,6 +11,7 @@ public:
 	vector<vector<double>> P; //probabilities matrix
 	vector<double> previousError;
 	unsigned int minibatchNumber;
+	unsigned int numberOfMistakes;
 
 	OutputLayer() {};
 	OutputLayer(int);

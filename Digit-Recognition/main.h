@@ -10,3 +10,7 @@
 #include "Minibatch.h"
 #include "Model.h"
 #include "ConsoleColor.h"
+
+void dataParameters();
+void initialise(Model&);
+void epochsNumber();

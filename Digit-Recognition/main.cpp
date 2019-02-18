@@ -1,71 +1,272 @@
 #include "pch.h"
 #include "main.h"
 
-int main()
-{
-#if !debug
+int minibatchSize;
+int datasetSize;
+int numberOfEpochs;
+double eta;
 
-	Data data;
-	Minibatch batch(data);
-	Model model;
-	model.batch = &batch;
+void dataParameters() {
+	string answer;
+	string cleanLine = "                                                  ";
 
-	data.readMnist();
-
-	OutputLayer outputLayer(10);
-	HiddenLayer hiddenLayer2(80, outputLayer);
-	HiddenLayer hiddenLayer1(300, hiddenLayer2);
-	InputLayer inputLayer(hiddenLayer1);
-
-	model.layers.push_back(&inputLayer);
-	model.layers.push_back(&hiddenLayer1);
-	model.layers.push_back(&hiddenLayer2);
-	model.layers.push_back(&outputLayer);
-
-	for (int k = 0; k < datasetSize/minibatchSize; k++)
+	cout << "Enter dataset size: ";
+	while (true)
 	{
-		model.train(100, true);
+		cin >> answer;
+		for (int i = 0; i < 50; i++)
+			cout << "\b \b";
+
+		char* p = 0;
+		strtol(answer.c_str(), &p, 10);
+		if (!(*p))
+		{
+			if (stoi(answer) <= 60000)
+			{
+				cout << "\r" << cleanLine << "\r";
+
+				datasetSize = stoi(answer);
+				break;
+			}
+			else
+			{
+				cout << "\r" << cleanLine << "\r";
+				cerr << "<maximum 60000> ";
+				cin.clear();
+				continue;
+			}
+		}
+		else
+		{
+			cout << "\r" << cleanLine << "\r";
+			cerr << "<not an integer> ";
+			cin.clear();
+			continue;
+		}
 	}
 
-#endif
+	cout << "Enter minibatch size: ";
+	while (true)
+	{
+		cin >> answer;
+		for (int i = 0; i < 50; i++)
+			cout << "\b \b";
+
+		char* p = 0;
+		strtol(answer.c_str(), &p, 10);
+		if (!(*p))
+		{
+			if (stoi(answer) <= datasetSize)
+			{
+				cout << "\r" << cleanLine << "\r";
+				minibatchSize = stoi(answer);
+				break;
+			}
+			else
+			{
+				cout << "\r" << cleanLine << "\r";
+				cerr << "<maximum " << datasetSize << "> ";
+				cin.clear();
+				continue;
+			}
+		}
+		else
+		{
+			cout << "\r" << cleanLine << "\r";
+			cerr << "<not an integer> ";
+			cin.clear();
+			continue;
+		}
+	}
+}
+
+void initialise(Model& model) {
+	string answer;
+	cout << "Initialise network from file? [\"yes\"/\"no\"]  ";
+	cin >> answer;
+	for (int i = 0; i < 50; i++)
+		cout << "\b \b";
+	for (int i = 0; i < 50; i++)
+		cout << "\b \b";
+
+	if (answer == "yes")
+	{
+		cout << "Enter file name: ";
+		cin >> answer;
+
+		model = Model(answer);
+		if (model.layers.empty())
+			initialise(model);
+	}
+	else if (answer == "no")
+	{
+		cout << "Give layers size:" << endl;
+		cout << "    [number] + [enter]" << endl;
+		cout << "    \"end\" to break" << endl;
+		cout << "    \"del\" to delete last layer" << endl << endl;
+
+		vector<int> layerSizes;
+		layerSizes.push_back(784);
+		string cleanLine = "                                                  ";
+
+		answer = "";
+		cout << "784-";
+
+		while (answer != "end")
+		{
+			cin >> answer;
+			for (int i = 0; i < 50; i++)
+				cout << "\b \b";
+
+			if (answer == "del")
+			{
+				if (layerSizes.empty())
+				{
+					cout << "\r" << cleanLine << "\r";
+					cerr << "<model is empty> ";
+					cin.clear();
+					continue;
+				}
+				else if (layerSizes.size() == 1)
+				{
+					cout << "\r" << cleanLine << "\r";
+					cerr << "<two layers required> ";
+					cin.clear();
+					continue;
+				}
+
+				else
+				{
+					layerSizes.pop_back();
+					cout << "\r" << cleanLine << "\r";
+					for (size_t i = 0; i < layerSizes.size(); i++)
+						cout << layerSizes[i] << "-";
+
+				}
+
+				if (layerSizes.empty())
+				{
+					cout << "\r" << cleanLine << "\r";
+					cout << "<model clear> ";
+				}
+			}
+			else
+			{
+				char* p = 0;
+				strtol(answer.c_str(), &p, 10);
+				if (!(*p))
+				{
+					layerSizes.push_back(stoi(answer));
+					cout << "\r" << cleanLine << "\r";
+					for (size_t i = 0; i < layerSizes.size(); i++)
+						cout << layerSizes[i] << "-";
+				}
+				else
+				{
+					cout << "\r" << cleanLine << "\r";
+					cerr << "<not an integer> ";
+					for (size_t i = 0; i < layerSizes.size(); i++)
+						cout << layerSizes[i] << "-";
+
+					cin.clear();
+					continue;
+				}
+			}
+		}
+		for (int i = 0; i < 300; i++)
+			cout << "\b \b";
+		for (int i = 0; i < 50; i++)
+			cout << "\b \b";
+
+
+
+		while (true)
+		{
+			cout << "\r" << cleanLine << "\r";
+			cout << "Learning rate: eta = ";
+			cin >> answer;
+
+			char* p = 0;
+			strtod(answer.c_str(), &p);
+			if (!(*p))
+			{
+				eta = stod(answer);
+				cout << "\r" << cleanLine << "\r";
+				break;
+			}
+			else
+			{
+				cout << "\r" << cleanLine << "\r";
+				cerr << "<not a number> ";
+				cin.clear();
+				continue;
+			}
+		}
+
+		cout << "\r" << cleanLine << "\r";
+		cout << "Generating model: ";
+		for (size_t i = 0; i < layerSizes.size(); i++)
+		{
+			cout << layerSizes[i];
+			if (i != layerSizes.size() - 1)
+				cout << "-";
+		}
+		cout << endl << endl;
+
+		model = Model(layerSizes);
+	}
+	else
+	{
+		cerr << "<wrong input>" << endl;
+		initialise(model);
+	}
+}
+
+void epochsNumber() {
+	string answer;
+	string cleanLine = "                                                  ";
+
+	cout << "Enter number of epochs: ";
+	while (true)
+	{
+		cin >> answer;
+		for (int i = 0; i < 50; i++)
+			cout << "\b \b";
+
+		char* p = 0;
+		strtoul(answer.c_str(), &p, 10);
+		if (!(*p))
+		{
+			cout << "\r" << cleanLine << "\r";
+			numberOfEpochs = stoi(answer);
+			break;
+		}
+		else
+		{
+			cout << "\r" << cleanLine << "\r";
+			cerr << "<not a positive integer> ";
+			cin.clear();
+			continue;
+		}
+	}
+}
+
+int main()
+{
 	
-#if debug
-	Minibatch batch;
-	Digit digit1, digit2;
+	Data data;
+	Minibatch batch(data);
+
 	Model model;
+	initialise(model);
+	model.batch = &batch;
 
-	digit1.label = 1;
-	digit1.image[0][0] = 1;
-	digit1.image[0][1] = 1;
-	digit1.image[1][0] = 0;
-	digit1.image[1][1] = 1;
-
-	digit2.label = 0;
-	digit2.image[0][0] = 0;
-	digit2.image[0][1] = 1;
-	digit2.image[1][0] = 0;
-	digit2.image[1][1] = 1;
-
-	OutputLayer out(2);
-	HiddenLayer hid2(5, out);
-	HiddenLayer hid1(3, hid2);
-	InputLayer in(hid1);
-
-	in.w[0][0] = 1;
-	hid1.w[0][0] = 1;
-	hid2.w[0][0] = 1;
-
-	batch.digits.push_back(digit1);
-	batch.digits.push_back(digit2);
-
-	in.loadMinibatch(batch);
-
-	model.layers.push_back(&in);
-	model.layers.push_back(&hid1);
-	model.layers.push_back(&hid2);
-	model.layers.push_back(&out);
+	dataParameters();
+	epochsNumber();
+	data.readMnist();
 	
-	model.train(100, true);
-#endif
+	model.train(numberOfEpochs, true);
+	model.saveToFile();
+	
 	system("pause");
 }
