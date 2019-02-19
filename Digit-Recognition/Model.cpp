@@ -44,7 +44,8 @@ Model::Model(string path)
 		static InputLayer inputLayer(outputLayer);
 		layers.push_back(&inputLayer);
 		layers.push_back(&outputLayer);
-	}
+	}	
+
 	getline(file, line);
 
 	for (size_t k = 0; k < layers.size() - 1; k++)
@@ -149,7 +150,6 @@ void Model::saveToFile()
 	{
 		cerr << "<\"" << path << "\" cannot be opened>" << endl;
 		file.open(path, fstream::out | fstream::trunc);
-
 	}
 
 	for (size_t i = 0; i < layers.size(); i++)
