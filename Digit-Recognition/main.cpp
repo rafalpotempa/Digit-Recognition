@@ -84,10 +84,6 @@ void initialise(Model& model) {
 	string answer;
 	cout << "Initialise network from file? [\"yes\"/\"no\"]  ";
 	cin >> answer;
-	for (int i = 0; i < 50; i++)
-		cout << "\b \b";
-	for (int i = 0; i < 50; i++)
-		cout << "\b \b";
 
 	if (answer == "yes")
 	{
@@ -112,13 +108,28 @@ void initialise(Model& model) {
 		answer = "";
 		cout << "784-";
 
-		while (answer != "end")
+		while (true)
 		{
 			cin >> answer;
 			for (int i = 0; i < 50; i++)
 				cout << "\b \b";
 
-			if (answer == "del")
+			if (answer == "end")
+			{
+				if (layerSizes.size() == 1)
+				{
+					cout << "\r" << cleanLine << "\r";
+					cerr << "<two layers required> ";
+					for (size_t i = 0; i < layerSizes.size(); i++)
+						cout << layerSizes[i] << "-";
+
+					cin.clear();
+					continue;
+				}
+				else
+					break;
+			}
+			else if (answer == "del")
 			{
 				if (layerSizes.empty())
 				{
@@ -130,7 +141,9 @@ void initialise(Model& model) {
 				else if (layerSizes.size() == 1)
 				{
 					cout << "\r" << cleanLine << "\r";
-					cerr << "<two layers required> ";
+					cerr << "<cannot delete> ";
+					for (size_t i = 0; i < layerSizes.size(); i++)
+						cout << layerSizes[i] << "-";
 					cin.clear();
 					continue;
 				}
@@ -173,12 +186,8 @@ void initialise(Model& model) {
 				}
 			}
 		}
-		for (int i = 0; i < 300; i++)
-			cout << "\b \b";
 		for (int i = 0; i < 50; i++)
 			cout << "\b \b";
-
-
 
 		while (true)
 		{
@@ -253,6 +262,8 @@ void epochsNumber() {
 
 int main()
 {
+	dataParameters();
+	epochsNumber();
 	
 	Data data;
 	Minibatch batch(data);
@@ -261,8 +272,6 @@ int main()
 	initialise(model);
 	model.batch = &batch;
 
-	dataParameters();
-	epochsNumber();
 	data.readMnist();
 	
 	model.train(numberOfEpochs, true);

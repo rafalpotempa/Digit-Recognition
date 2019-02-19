@@ -95,8 +95,8 @@ double OutputLayer::squareError()
 		for (int i = 0; i < outputs; i++)
 			result += D[i][k] * D[i][k];
 		
-		result *= 0.5;
 	}
+	result *= 0.5;
 	return result;
 }
 
